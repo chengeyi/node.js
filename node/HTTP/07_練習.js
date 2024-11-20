@@ -1,10 +1,10 @@
 // 導入HTTP模塊
 const http = require('http');
-
+console.log(http)
 // 創建服務對象
 const server = http.createServer((request, response) => {
    response.setHeader('content-type', 'text/html;charset=utf-8');
-   
+   console.log(request.url)
    // 獲取請求方法
    let {method} = request;
    // 獲取請求URL路徑
