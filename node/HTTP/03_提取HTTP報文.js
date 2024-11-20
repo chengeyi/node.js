@@ -5,16 +5,16 @@
    //  response.setHeader('content-type', 'text/html;charset=utf-8');
 
    // 獲取請求方法
-   console.log(request.method);
+   //console.log(request.method);
 
    // 獲取請求url
-   console.log(request.url); // 只包含url中的路徑與查詢字串
+   //console.log(request.url); // 只包含url中的路徑與查詢字串
 
    // 獲取http協議的版本號
-   console.log(request.httpVersion);
+   //console.log(request.httpVersion);
 
    // 獲取請求頭
-   console.log(request.headers);
+   //console.log(request.headers);
    
     response.end('hello')
  })
