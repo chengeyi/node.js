@@ -6,23 +6,27 @@
 // 導入HTTP模塊
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
+
 // 創建服務對象
 const server = http.createServer((request, response) => {
   // 獲取請求url路徑
   let {pathname} = new URL(request.url, 'http://127.0.0.1:9001');
   //網站根目錄
   let root = __dirname + '/page'; 
-  console.log(root)
   // 拼接文件路徑
-  let fileFile = root + pathname;
+  let filePath = root + pathname;
   // 讀取文件 fs 異步API
-  fs.readFile(fileFile, (err, data) => {
-    console.log(fileFile)
+  fs.readFile(filePath, (err, data) => {
     if(err) {
       response.statusCode = 500;
       response.end('文件讀取失敗');
       return;
     }
+
+    // 獲取文件後綴名
+    let ext = path.extname(filePath).slice(1);
+    console.log('ext', ext)
 
     response.end(data);
   })
