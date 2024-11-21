@@ -10,13 +10,14 @@ const fs = require('fs');
 const server = http.createServer((request, response) => {
   // 獲取請求url路徑
   let {pathname} = new URL(request.url, 'http://127.0.0.1:9001');
-  console.log(pathname)
-
+  //網站根目錄
+  let root = __dirname + '/page'; 
+  console.log(root)
   // 拼接文件路徑
-  let fileFile = __dirname + '/page' + pathname;
-  console.log(fileFile)
+  let fileFile = root + pathname;
   // 讀取文件 fs 異步API
   fs.readFile(fileFile, (err, data) => {
+    console.log(fileFile)
     if(err) {
       response.statusCode = 500;
       response.end('文件讀取失敗');
