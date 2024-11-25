@@ -8,6 +8,19 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
+// 聲明mimes變數
+let mimes = {
+  html: 'text/html',
+  css: 'text/xss',
+  js: 'text/javascript',
+  png: 'image/png',
+  jpg: 'image/jpeg',
+  gif: 'image/gif',
+  mp4: 'video/mp4',
+  mp3: 'audio/mpeg',
+  json: 'application/json'
+}
+
 // 創建服務對象
 const server = http.createServer((request, response) => {
   // 獲取請求url路徑
@@ -26,7 +39,13 @@ const server = http.createServer((request, response) => {
 
     // 獲取文件後綴名
     let ext = path.extname(filePath).slice(1);
-    console.log('ext', ext)
+    // 獲取對應類型(雖然瀏覽器會預設判斷傳回客戶端的資料格式類型，但加上會更有規範)
+    let type = mimes[ext];
+    if(type) {
+      response.setHeader('content-type', type);
+    }else {
+      response.setHeader('content-type', 'application/octet-stream');
+    }
 
     response.end(data);
   })
