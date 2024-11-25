@@ -1,1 +1,1 @@
-console.log('success')
+console.log('success 成功')

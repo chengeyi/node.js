@@ -23,17 +23,36 @@ let mimes = {
 
 // 創建服務對象
 const server = http.createServer((request, response) => {
+  if(request.method !== 'GET') {
+    response.statusCode = 405;
+    response.end('404 Method Not Allowed');
+    return;
+  }
   // 獲取請求url路徑
   let {pathname} = new URL(request.url, 'http://127.0.0.1:9001');
-  //網站根目錄
+  // 網站根目錄
   let root = __dirname + '/page'; 
   // 拼接文件路徑
   let filePath = root + pathname;
   // 讀取文件 fs 異步API
   fs.readFile(filePath, (err, data) => {
     if(err) {
-      response.statusCode = 500;
-      response.end('文件讀取失敗');
+      // 設置字符及
+      response.setHeader('content-type', 'text/html;charset=utf-8');
+      // 判斷錯誤代號
+      switch(err.code) {
+        case 'ENOENT':
+          response.statusCode = 400;
+          response.end('404 Not Found');
+        case 'EPERM':
+          response.statusCode = 403;
+          response.end('403 Forbidden');
+        default:
+          response.statusCode = 500;
+          response.end('Internal Server Errpr');
+      }
+      // response.statusCode = 500;
+      // response.end('文件讀取失敗');
       return;
     }
 
@@ -42,7 +61,12 @@ const server = http.createServer((request, response) => {
     // 獲取對應類型(雖然瀏覽器會預設判斷傳回客戶端的資料格式類型，但加上會更有規範)
     let type = mimes[ext];
     if(type) {
-      response.setHeader('content-type', type);
+      if(ext === 'html') {
+        // text/html;charset=utf-8
+        response.setHeader('content-type', type + ';charset=utf-8');
+      }else {
+        response.setHeader('content-type', type);
+      }
     }else {
       response.setHeader('content-type', 'application/octet-stream');
     }
